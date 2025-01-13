@@ -10,8 +10,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
-from .models import Posts
-from comments.models import Comments
+from .models import Post
+from comments.models import Comment
 from .forms import PostCreateForm, PostUpdateForm
 
 # 게시글 등록
@@ -57,14 +57,14 @@ def create_post(request):
 # 게시글 보기
 @login_required(login_url='auth:login')
 def get_post(request, post_id):
-    post = get_object_or_404(Posts, id=post_id)
-    comments = Comments.objects.filter(post=post_id).order_by('-created_at')
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(post=post_id).order_by('-created_at')
     return render(request, 'posts/read.html', {'post': post, 'comments': comments})
 
 # 게시글 수정
 @login_required(login_url='auth:login')
 def update_post(request, post_id):
-    post = get_object_or_404(Posts, id=post_id) 
+    post = get_object_or_404(Post, id=post_id) 
        
     if post.created_by != request.user:
         messages.error(request, '게시글을 수정 권한이 없습니다.')
@@ -128,7 +128,7 @@ def update_post(request, post_id):
 # 게시글 삭제
 @login_required(login_url='auth:login')
 def delete_post(request, post_id):
-    post = get_object_or_404(Posts, id=post_id)
+    post = get_object_or_404(Post, id=post_id)
     
     if post.created_by != request.user:
         messages.error(request, '게시글을 삭제 권한이 없습니다.')
@@ -151,7 +151,7 @@ def get_posts(request):
     page = request.GET.get('page', '1') 
     searchType = request.GET.get('searchType')
     searchKeyword = request.GET.get('searchKeyword')
-    posts = Posts.objects.all().order_by('-created_at')
+    posts = Post.objects.all().order_by('-created_at')
     
     # 검색 조건 처리
     if searchType not in [None, ''] and searchKeyword not in [None, '']:
@@ -193,8 +193,8 @@ def get_posts(request):
     
 # 첨부 파일 다운로드
 @login_required(login_url='auth:login')
-def posts_download(request, post_id):
-    post = get_object_or_404(Posts, id=post_id)
+def file_download(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
     file_path = os.path.join(settings.MEDIA_ROOT, 'posts', str(post.id), str(post.filename))
     
     if os.path.exists(file_path):

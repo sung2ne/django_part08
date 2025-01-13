@@ -1,5 +1,5 @@
 from django import forms
-from .models import Posts
+from .models import Post
 
 # 게시글 등록 폼
 class PostCreateForm(forms.ModelForm):

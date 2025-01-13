@@ -1,12 +1,12 @@
 from django.http import JsonResponse
 from django.utils import timezone
 
-from posts.models import Posts
-from .models import Comments
+from posts.models import Post
+from .models import Comment
 
 # 댓글 목록
 def get_comments(post_id):
-    comments = Comments.objects.filter(post=post_id).order_by('-created_at')
+    comments = Comment.objects.filter(post=post_id).order_by('-created_at')
     comments_list = []
     for comment in comments:
         comments_list.append({
@@ -29,7 +29,7 @@ def create_comment(request):
         if not post_id:
             return JsonResponse({'result': 'error', 'message': '게시글을 선택해주세요.'})
         
-        post = Posts.objects.get(id=post_id)        
+        post = Post.objects.get(id=post_id)        
         if not post:
             return JsonResponse({'result': 'error', 'message': '게시글을 찾을 수 없습니다.'})
         
@@ -38,7 +38,7 @@ def create_comment(request):
             return JsonResponse({'result': 'error', 'message': '댓글 내용을 입력해주세요.'})
         
         # 댓글 등록
-        comment = Comments(
+        comment = Comment(
             post=post,
             content=content,
             created_by=request.user,
@@ -61,7 +61,7 @@ def update_comment(request, comment_id):
         if not post_id:
             return JsonResponse({'result': 'error', 'message': '게시글을 선택해주세요.'})
         
-        post = Posts.objects.get(id=post_id)        
+        post = Post.objects.get(id=post_id)        
         if not post:
             return JsonResponse({'result': 'error', 'message': '게시글을 찾을 수 없습니다.'})
         
@@ -73,7 +73,7 @@ def update_comment(request, comment_id):
         if not comment_id:
             return JsonResponse({'result': 'error', 'message': '댓글을 선택해주세요.'})
         
-        comment = Comments.objects.get(id=comment_id)
+        comment = Comment.objects.get(id=comment_id)
         if not comment:
             return JsonResponse({'result': 'error', 'message': '댓글을 찾을 수 없습니다.'})
         
@@ -100,7 +100,7 @@ def delete_comment(request, comment_id):
         if not post_id:
             return JsonResponse({'result': 'error', 'message': '게시글을 선택해주세요.'})
         
-        post = Posts.objects.get(id=post_id)        
+        post = Post.objects.get(id=post_id)        
         if not post:
             return JsonResponse({'result': 'error', 'message': '게시글을 찾을 수 없습니다.'})
         
@@ -112,7 +112,7 @@ def delete_comment(request, comment_id):
         if not comment_id:
             return JsonResponse({'result': 'error', 'message': '댓글을 선택해주세요.'})
         
-        comment = Comments.objects.get(id=comment_id)
+        comment = Comment.objects.get(id=comment_id)
         if not comment:
             return JsonResponse({'result': 'error', 'message': '댓글을 찾을 수 없습니다.'})
         

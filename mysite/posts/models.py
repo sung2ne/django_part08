@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # 게시글 모델
-class Posts(models.Model):
+class Post(models.Model):
     title = models.CharField(verbose_name="제목", max_length=100)
     content = models.TextField(verbose_name="내용")
     password = models.CharField(verbose_name="비밀번호", max_length=100)

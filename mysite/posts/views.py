@@ -193,7 +193,7 @@ def get_posts(request):
     
 # 첨부 파일 다운로드
 @login_required(login_url='auth:login')
-def file_download(request, post_id):
+def download_file(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     file_path = os.path.join(settings.MEDIA_ROOT, 'posts', str(post.id), str(post.filename))
     
